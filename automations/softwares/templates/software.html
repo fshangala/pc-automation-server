@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block main %}
+
+<div class="uk-container">
+{% for software in softwares %}
+    <div class="uk-card uk-card-default uk-card-hover uk-card-body">
+        <h3 class="uk-card-title">{{ software.sfname }}</h3>
+        <a class="uk-button uk-button-default" href="{% url 'download' software_id=software.id %}">Download</a>
+    </div>
+{% empty %}
+<div class="uk-card uk-card-default uk-card-hover uk-card-body">
+    <h3 class="uk-card-title">No softwares or apps available</h3>
+</div>
+{% endfor %}
+</div>
+
+{% endblock main %}
