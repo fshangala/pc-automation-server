@@ -23,7 +23,8 @@ def download(request,software_id):
     # Define text file name
     filename = get_object_or_404(Software,pk=software_id)
     # Define the full file path
-    filepath = BASE_DIR + "/" + filename.sffile.name
+    filepath = os.path.join(BASE_DIR,filename.sffile.name)
+    print(filepath)
     # Open the file for reading content
     path = open(filepath, 'rb')
     # Set the mime type
