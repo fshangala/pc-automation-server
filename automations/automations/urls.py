@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from softwares.views import softwaresView, download
+from pcautomation.views import AutomationView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',softwaresView,name="softwares"),
-    path('download/<int:software_id>/', download, name="download")
+    path('download/<int:software_id>/', download, name="download"),
+    path('api/pcautomation/<code>/',AutomationView.as_view(),name="apiauto")
 ]
