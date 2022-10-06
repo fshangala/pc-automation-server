@@ -2,10 +2,24 @@
 {% block main %}
 
 <div class="uk-container" id="data-container"></div>
+
+<center id="spinner">
+    <div uk-spinner="ratio: 3"></div>
+</center>
+{{software|json_script:"software-data"}}
+
 <script>
 
+    var root = document.querySelector("#data-container")
+    var software = JSON.parse(document.querySelector("#software-data").innerText)
+    
+    var title = document.createElement("h1")
+    root.appendChild(title)
+    title.innerText = software.repositoryname
+
     function renderRelease(release){
-        var root = document.querySelector("#data-container")
+
+        document.querySelector("#spinner").style.display = "none"
 
         var container = document.createElement("div")
         container.classList.add("uk-card")
@@ -13,6 +27,9 @@
         container.classList.add("uk-card-hover")
         container.classList.add("uk-card-body")
         root.appendChild(container)
+
+        var seperator = document.createElement("br")
+        root.appendChild(seperator)
 
         var heading = document.createElement("h3")
         heading.classList.add("uk-card-title")
@@ -22,7 +39,7 @@
         container.appendChild(body)
 
         //Adding content
-        heading.innerText = "J11 Lambo"
+        heading.innerText = release.tag_name
         body.innerHTML = marked.parse(release.body)
 
         release.assets.forEach((asset)=>{
@@ -31,21 +48,21 @@
             a.classList.add("uk-button-primary")
             a.setAttribute("href",asset.browser_download_url)
 
-            a.innerText = asset.name
+            a.innerText = asset.name + " " + release.tag_name
 
             container.appendChild(a)
         })
     }
 
     function renderError(error){
-        console.log(error)
+        document.querySelector("#spinner").style.display = "none"
+        alert(error)
     }
 
-    var softwares = JSON.parse("{{softwares|escapejs}}")
-    console.log(softwares)
-
-    fetch("https://api.github.com/repos/fshangala/j11lambo/releases").then(response => response.json()).then((data)=>{
-        renderRelease(data[0])
+    fetch(`https://api.github.com/repos/${software.repositoryowner}/${software.repositoryname}/releases`).then(response => response.json()).then((data)=>{
+        data.forEach((item)=>{
+            renderRelease(item)
+        })
     }).catch((error)=>{
         renderError(error)
     })
