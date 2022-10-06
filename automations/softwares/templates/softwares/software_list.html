@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block main %}
+
+<div class="uk-container" id="data-container">
+    {% for software in softwares %}
+        <div class="uk-card uk-card-default uk-card-hover uk-card-body">
+            <h3 class="uk-card-title">{{ software.repositoryname }}</h3>
+            <a class="uk-button uk-button-default" href="{{software.get_absolute_url}}">View Software Releases</a>
+        </div>
+    {% empty %}
+    <div class="uk-card uk-card-default uk-card-hover uk-card-body">
+        <h3 class="uk-card-title">No softwares or apps available</h3>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock main %}
