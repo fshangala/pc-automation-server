@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import json, datetime
+from django.conf import settings
 
 # Create your views here.
 class AutomationView(APIView):
@@ -17,3 +18,7 @@ class AutomationView(APIView):
             'data':text_data_json
         })
         return Response(text_data_json)
+
+class SoftwareVersion(APIView):
+    def get(self,request):
+        return Response({'version':settings.VERSION})

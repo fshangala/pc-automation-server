@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
 from softwares.views import SoftwareListView, SoftwareDetailView
-from pcautomation.views import AutomationView
+from pcautomation.views import AutomationView, SoftwareVersion
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,5 +26,6 @@ urlpatterns = [
     path('',SoftwareListView.as_view(),name="softwares-list"),
     path('detail/<pk>/',SoftwareDetailView.as_view(),name="softwares-detail"),
     path('api/pcautomation/<code>/',AutomationView.as_view(),name="apiauto"),
+    path('api/version/',SoftwareVersion.as_view(),name="version"),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL+'images/favicon.ico')),
 ]
