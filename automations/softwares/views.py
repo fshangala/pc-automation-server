@@ -4,6 +4,12 @@ from django.shortcuts import get_object_or_404, render
 from .models import Software
 from django.contrib.auth.decorators import login_required
 import os
+from softwares.serializers import SoftwareSerializer
+from django.views.generic import ListView
+
+class SoftwareListView(ListView):
+    model=Software
+    context_object_name="softwares"
 
 # Create your views here.
 @login_required
@@ -12,7 +18,7 @@ def softwaresView(request):
     context={}
 
     softwares=Software.objects.all()
-    context["softwares"]=softwares
+    context["softwares"]=SoftwareSerializer(softwares,many=True).data
 
     return render(request,template_name,context)
 

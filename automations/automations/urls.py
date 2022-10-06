@@ -16,14 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
-from softwares.views import softwaresView, download
+from softwares.views import softwaresView, download, SoftwareListView
 from pcautomation.views import AutomationView
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',softwaresView,name="softwares"),
+    path('',SoftwareListView.as_view(),name="softwares"),
     path('download/<int:software_id>/', download, name="download"),
     path('api/pcautomation/<code>/',AutomationView.as_view(),name="apiauto"),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL+'images/favicon.ico')),
