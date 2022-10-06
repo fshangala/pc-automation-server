@@ -12,9 +12,16 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
+env = environ.Env(
+    DEBUG=(bool,True),
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(os.path.join(BASE_DIR,".env"))
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-wh7a217!km@py11)+g84hxbaw)9t4$ba0_dcedabyyc)w08bc!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
 
@@ -82,12 +89,12 @@ WSGI_APPLICATION = 'automations.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pcautomation',
-        'USER': 'root',
-        'PASSWORD': 'shangala',
-        'HOST': 'localhost',
-        'PORT': 3306,
+        'ENGINE': env("DB_ENGINE"),
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT"),
     }
 }
 
@@ -135,16 +142,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ASGI_APPLICATION = "automations.asgi.application"
 
-CHANNEL_LAYERS = {
-    #'default': {
-    #    'BACKEND': 'channels_redis.core.RedisChannelLayer',
-    #    'CONFIG': {
-    #        "hosts": [('127.0.0.1', 9999)],
-    #    },
-    #},
-    'default': {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    },
-}
+if env("DEBUG",bool):
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND':env("CHANNEL_LAYER_BACKEND"),
+            'CONFIG': {
+                "hosts": [(env("CHANNEL_LAYER_HOST"),env("CHANNEL_LAYER_PORT"))]
+            }
+        }
+    }
+else:
+    CHANNEL_LAYERS = {
+        'default': {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        },
+    }
 
 LOGIN_URL = '/admin/login/'
