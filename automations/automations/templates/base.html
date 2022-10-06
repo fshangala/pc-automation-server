@@ -24,5 +24,13 @@
             </div>
         </nav>
         {% block main %}{% endblock main %}
+        <footer>
+            <center id="version"></center>
+        </footer>
+        <script>
+            fetch("/api/version/").then((response)=>response.json()).then((data)=>{
+                document.querySelector("#version").innerHTML = data.version
+            })
+        </script>
     </body>
 </html>
