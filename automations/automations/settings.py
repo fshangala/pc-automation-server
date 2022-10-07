@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import environ
 
-VERSION = "v1.2"
+VERSION = "v1.3"
 
 env = environ.Env(
     DEBUG=(bool,True),
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'automations',
     'pcautomation',
     'softwares',
+    'monitor',
 
     'channels',
     'rest_framework',
