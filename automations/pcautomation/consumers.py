@@ -51,6 +51,11 @@ class PCAutomationConsumer(WebsocketConsumer):
         if event["event"] == self.channel_name:
             self.close()
     
+    def event_user(self,event):
+        conn = Connection.objects.get(channel=self.channel_name)
+        conn.user = event["args"][0]
+        conn.save()
+    
     def event_connection(self,event):
         connection_data = {
             "devicetype":event["event"],

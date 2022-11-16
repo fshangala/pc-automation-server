@@ -8,6 +8,7 @@ from asgiref.sync import async_to_sync
 class Connection(models.Model):
     devicetype=models.CharField(max_length=200)
     channel=models.CharField(max_length=200,unique=True)
+    user=models.CharField(max_length=200,null=True)
     datetime=models.CharField(max_length=200)
     
     @receiver(post_delete)
