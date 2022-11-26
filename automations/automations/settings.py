@@ -91,14 +91,7 @@ WSGI_APPLICATION = 'automations.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': env("DB_ENGINE"),
-        'NAME': env("DB_NAME"),
-        'USER': env("DB_USER"),
-        'PASSWORD': env("DB_PASSWORD"),
-        'HOST': env("DB_HOST"),
-        'PORT': env("DB_PORT"),
-    }
+    'default': f'mysql://{env("DB_USER")}:{env("DB_PASSWORD")}@env("DB_HOST"):{env("DB_PORT")}/{env("DB_NAME")}'
 }
 
 # Password validation
