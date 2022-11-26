@@ -3,8 +3,6 @@ version: "3.7"
 services:
   app:
     build: .
-    command: python manage.py migrate
-    command: python manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
   mysql:
@@ -12,4 +10,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: pcautomation
+  redis:
+    image: redis
         
