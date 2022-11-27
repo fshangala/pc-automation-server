@@ -13,8 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.views.generic import RedirectView
 from softwares.views import SoftwareListView, SoftwareDetailView
 from pcautomation.views import AutomationView, SoftwareVersion
@@ -28,4 +29,5 @@ urlpatterns = [
     path('api/pcautomation/<code>/',AutomationView.as_view(),name="apiauto"),
     path('api/version/',SoftwareVersion.as_view(),name="version"),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL+'images/favicon.ico')),
+    path('monitor/',include("monitor.urls")),
 ]

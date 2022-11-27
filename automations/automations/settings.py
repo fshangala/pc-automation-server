@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import environ
 
-VERSION = "v1.2"
+VERSION = "v1.3"
 
 env = environ.Env(
     DEBUG=(bool,True),
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'automations',
     'pcautomation',
     'softwares',
+    'monitor',
 
     'channels',
     'rest_framework',
@@ -89,16 +90,6 @@ WSGI_APPLICATION = 'automations.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': env("DB_ENGINE"),
-        'NAME': env("DB_NAME"),
-        'USER': env("DB_USER"),
-        'PASSWORD': env("DB_PASSWORD"),
-        'HOST': env("DB_HOST"),
-        'PORT': env("DB_PORT"),
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -124,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = env("TIME_ZONE")
 
 USE_I18N = True
 
@@ -145,6 +136,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ASGI_APPLICATION = "automations.asgi.application"
 
 if env("DEBUG",bool):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    CHANNEL_LAYERS = {
+        'default': {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        },
+    }
+else:
+    
+    DATABASES = {
+        'default': f'mysql://{env("DB_USER")}:{env("DB_PASSWORD")}@env("DB_HOST"):{env("DB_PORT")}/{env("DB_NAME")}'
+    }
     CHANNEL_LAYERS = {
         'default': {
             'BACKEND':env("CHANNEL_LAYER_BACKEND"),
@@ -152,12 +159,6 @@ if env("DEBUG",bool):
                 "hosts": [(env("CHANNEL_LAYER_HOST"),env("CHANNEL_LAYER_PORT"))]
             }
         }
-    }
-else:
-    CHANNEL_LAYERS = {
-        'default': {
-            "BACKEND": "channels.layers.InMemoryChannelLayer"
-        },
     }
 
 LOGIN_URL = '/admin/login/'
