@@ -90,9 +90,6 @@ WSGI_APPLICATION = 'automations.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': f'mysql://{env("DB_USER")}:{env("DB_PASSWORD")}@env("DB_HOST"):{env("DB_PORT")}/{env("DB_NAME")}'
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -139,6 +136,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ASGI_APPLICATION = "automations.asgi.application"
 
 if env("DEBUG",bool):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    CHANNEL_LAYERS = {
+        'default': {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        },
+    }
+else:
+    
+    DATABASES = {
+        'default': f'mysql://{env("DB_USER")}:{env("DB_PASSWORD")}@env("DB_HOST"):{env("DB_PORT")}/{env("DB_NAME")}'
+    }
     CHANNEL_LAYERS = {
         'default': {
             'BACKEND':env("CHANNEL_LAYER_BACKEND"),
@@ -146,12 +159,6 @@ if env("DEBUG",bool):
                 "hosts": [(env("CHANNEL_LAYER_HOST"),env("CHANNEL_LAYER_PORT"))]
             }
         }
-    }
-else:
-    CHANNEL_LAYERS = {
-        'default': {
-            "BACKEND": "channels.layers.InMemoryChannelLayer"
-        },
     }
 
 LOGIN_URL = '/admin/login/'
