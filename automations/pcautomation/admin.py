@@ -1,6 +1,6 @@
 from django.contrib import admin
-from pcautomation.models import Connection
+from pcautomation.models import LamboConnection
 
-@admin.register(Connection)
+@admin.register(LamboConnection)
 class ConnectionAdmin(admin.ModelAdmin):
     list_display=["devicetype","user","datetime"]
