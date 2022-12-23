@@ -2,6 +2,6 @@ FROM python:3.10
 WORKDIR /app
 COPY . .
 RUN pip install -r requirements.txt
-RUN python manage.py migrate
+RUN cp .env.dist .env
 
-CMD ["python","manage.py","runserver","0.0.0.0:8000"]
+CMD ["daphne","-b","0.0.0.0","-p","80","automations.asgi:application"]

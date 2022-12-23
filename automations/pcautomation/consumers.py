@@ -48,7 +48,7 @@ class PCAutomationConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps(data))
         
     def disconnect_channel(self,event):
-        if event["event"] == self.channel_name:
+        if event["data"]["event"] == self.channel_name:
             self.close()
     
     def event_user(self,event):

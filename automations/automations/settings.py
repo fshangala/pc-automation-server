@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import environ
 
-VERSION = "v1.3"
+VERSION = "v1.3.1"
 
 env = environ.Env(
     DEBUG=(bool,True),
@@ -135,7 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ASGI_APPLICATION = "automations.asgi.application"
 
-if env("DEBUG",bool):
+if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -148,9 +148,15 @@ if env("DEBUG",bool):
         },
     }
 else:
-    
     DATABASES = {
-        'default': f'mysql://{env("DB_USER")}:{env("DB_PASSWORD")}@env("DB_HOST"):{env("DB_PORT")}/{env("DB_NAME")}'
+        'default': {
+            'ENGINE': env("DB_ENGINE"),
+            'NAME': env("DB_NAME"),
+            'USER': env("DB_USER"),
+            'PASSWORD': env("DB_PASSWORD"),
+            'HOST': env("DB_HOST"),
+            'PORT': env("DB_PORT"),
+        }
     }
     CHANNEL_LAYERS = {
         'default': {
