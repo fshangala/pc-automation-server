@@ -149,7 +149,14 @@ if DEBUG:
     }
 else:
     DATABASES = {
-        'default': f'mysql://{env("DB_USER")}:{env("DB_PASSWORD")}@env("DB_HOST"):{env("DB_PORT")}/{env("DB_NAME")}'
+        'default': {
+            'ENGINE': env("DB_ENGINE"),
+            'NAME': env("DB_NAME"),
+            'USER': env("DB_USER"),
+            'PASSWORD': env("DB_PASSWORD"),
+            'HOST': env("DB_HOST"),
+            'PORT': env("DB_PORT"),
+        }
     }
     CHANNEL_LAYERS = {
         'default': {
