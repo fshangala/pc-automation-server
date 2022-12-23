@@ -2,7 +2,7 @@ import datetime
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-from pcautomation.models import LamboConnection
+from pcautomation.models import Connection
 from django.utils import timezone
 
 class PCAutomationConsumer(WebsocketConsumer):
@@ -20,8 +20,8 @@ class PCAutomationConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_discard)("public",self.channel_name)
         async_to_sync(self.channel_layer.group_discard)(self.room_name,self.channel_name)
         try:
-            connection = LamboConnection.objects.get(channel=self.channel_name)
-            LamboConnection.delete()
+            connection = Connection.objects.get(channel=self.channel_name)
+            connection.delete()
         except Exception as e:
             print(e)
     
@@ -52,7 +52,7 @@ class PCAutomationConsumer(WebsocketConsumer):
             self.close()
     
     def event_user(self,event):
-        conn = LamboConnection.objects.get(channel=self.channel_name)
+        conn = Connection.objects.get(channel=self.channel_name)
         conn.user = event["args"][0]
         conn.save()
     
@@ -62,7 +62,7 @@ class PCAutomationConsumer(WebsocketConsumer):
             "channel":self.channel_name,
             "datetime":timezone.now().strftime("%d-%b-%Y %H:%M:%S")
         }
-        LamboConnection.objects.create(**connection_data)
+        Connection.objects.create(**connection_data)
     
     def event_disconnection(self,event):
         async_to_sync(self.channel_layer.group_send)(
