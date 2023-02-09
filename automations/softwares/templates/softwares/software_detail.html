@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% block main %}
 
-<div class="uk-container" id="data-container"></div>
-
-<center id="spinner">
-    <div uk-spinner="ratio: 3"></div>
-</center>
+<div class="container" id="data-container">
+    <div class="text-center" id="spinner">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+</div>
 {{software|json_script:"software-data"}}
 
 <script>
@@ -22,35 +24,37 @@
         document.querySelector("#spinner").style.display = "none"
 
         var container = document.createElement("div")
-        container.classList.add("uk-card")
-        container.classList.add("uk-card-default")
-        container.classList.add("uk-card-hover")
-        container.classList.add("uk-card-body")
+        container.classList.add("card")
         root.appendChild(container)
+
+        var body = document.createElement("div")
+        body.classList.add("card-body")
+        container.appendChild(body)
+
+        var heading = document.createElement("h3")
+        heading.classList.add("card-title")
+        body.appendChild(heading)
+
+        var cardText = document.createElement("p")
+        cardText.classList.add("card-text")
+        body.appendChild(cardText)
 
         var seperator = document.createElement("br")
         root.appendChild(seperator)
 
-        var heading = document.createElement("h3")
-        heading.classList.add("uk-card-title")
-        container.appendChild(heading)
-
-        var body = document.createElement("p")
-        container.appendChild(body)
-
         //Adding content
         heading.innerText = release.tag_name
-        body.innerHTML = marked.parse(release.body)
+        cardText.innerHTML = marked.parse(release.body)
 
         release.assets.forEach((asset)=>{
             var a = document.createElement("a")
-            a.classList.add("uk-button")
-            a.classList.add("uk-button-primary")
+            a.classList.add("btn")
+            a.classList.add("btn-outline-primary")
             a.setAttribute("href",asset.browser_download_url)
 
             a.innerText = asset.name + " " + release.tag_name
 
-            container.appendChild(a)
+            body.appendChild(a)
         })
     }
 

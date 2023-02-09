@@ -1,19 +1,25 @@
 {% extends 'base.html' %}
 {% block main %}
 
-<div class="uk-container" id="data-container">
-    {% for software in softwares %}
-        <div class="uk-card uk-card-default uk-card-hover uk-card-body">
-            <h3 class="uk-card-title">{{ software.repositoryname }}</h3>
-            <a class="uk-button uk-button-default" href="{{software.get_absolute_url}}">View Software Releases</a>
-        </div>
+<div class="container" id="data-container">
+    <div class="list-group">
+        {% for software in softwares %}
+        <a href="{{software.get_absolute_url}}" class="list-group-item list-group-item-action">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ software.repositoryname }}</h5>
+          </div>
+          <small class="text-muted">{{software.repositoryowner}}</small>
+        </a>
         <br>
-    {% empty %}
-    <div class="uk-card uk-card-default uk-card-hover uk-card-body">
-        <h3 class="uk-card-title">No softwares or apps available</h3>
-    </div>
-    <br>
-    {% endfor %}
+        {% empty %}
+        <a href="#" class="list-group-item list-group-item-action disabled">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">No Items</h5>
+          </div>
+        </a>
+        <br>
+        {% endfor %}
+      </div>
 </div>
 
 {% endblock main %}
