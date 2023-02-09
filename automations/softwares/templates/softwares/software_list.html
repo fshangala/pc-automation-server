@@ -4,7 +4,7 @@
 <div class="container" id="data-container">
     <div class="list-group">
         {% for software in softwares %}
-        <a href="{{software.get_absolute_url}}" class="list-group-item list-group-item-action">
+        <a href="{{software.get_absolute_url}}" class="list-group-item list-group-item-action shadow">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ software.repositoryname }}</h5>
           </div>
