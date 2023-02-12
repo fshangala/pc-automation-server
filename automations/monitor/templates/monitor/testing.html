@@ -129,7 +129,7 @@
     var eventName = document.querySelector('#eventName').value
     var eventArgs = document.querySelector('#eventArgs').value
 
-    var eventJson = `{"event_type":"${eventType}","event_name":"${eventName}","event_args":${eventArgs},"event_kwargs":{}}`
+    var eventJson = `{"event_type":"${eventType}","event":"${eventName}","args":${eventArgs},"kwargs":{}}`
     socket.send(eventJson)
   })
 </script>
