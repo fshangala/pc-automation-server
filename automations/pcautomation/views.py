@@ -5,6 +5,8 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import json, datetime
 from django.conf import settings
+from rest_framework import viewsets
+from . import models, serializers
 
 # Create your views here.
 class AutomationView(APIView):
@@ -22,3 +24,8 @@ class AutomationView(APIView):
 class SoftwareVersion(APIView):
     def get(self,request):
         return Response({'version':settings.VERSION})
+
+class ConnectionViewsets(viewsets.ModelViewSet):
+    queryset=models.Connection.objects.all()
+    serializer_class=serializers.ConnectionSerializer
+    

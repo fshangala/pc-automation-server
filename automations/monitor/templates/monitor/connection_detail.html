@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'monitor:index' %}">Monitor</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'monitor:connections' %}">Connection List</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Connection {{connection.id}}</li>
+    </ol>
+  </nav>
+  <table class="table">
+    <tr>
+      <th scope="row">Device Type</th>
+      <td>{{connection.devicetype}}</td>
+    </tr>
+    <tr>
+      <th scope="row">User</th>
+      <td>{{connection.user}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Timestamp</th>
+      <td>{{connection.datetime}}</td>
+    </tr>
+  </table>
+</div>
+{% endblock main %}

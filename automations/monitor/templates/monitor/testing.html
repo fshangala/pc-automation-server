@@ -2,6 +2,12 @@
 
 {% block main %}
 <div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'monitor:index' %}">Monitor</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Testing</li>
+    </ol>
+  </nav>
   <button type="button" class="btn btn-primary position-relative" data-bs-toggle="modal" data-bs-target="#connectionModal">
     <span id="connection-code">sample</span>
     <span id="connection-badge" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border-light rounded-circle">

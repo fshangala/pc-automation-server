@@ -21,6 +21,11 @@ from softwares.views import SoftwareListView, SoftwareDetailView
 from pcautomation.views import AutomationView, SoftwareVersion
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
+from pcautomation.urls import router as pcautomationRouter
+
+router = DefaultRouter()
+router.registry.extend(pcautomationRouter.registry)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,4 +35,5 @@ urlpatterns = [
     path('api/version/',SoftwareVersion.as_view(),name="version"),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL+'images/favicon.ico')),
     path('monitor/',include("monitor.urls")),
+    path('api/',include(router.urls))
 ]
