@@ -27,6 +27,14 @@ class PCAutomationConsumer(WebsocketConsumer):
     
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
+        text_data_json["channel"] = self.channel_name
+        async_to_sync(self.channel_layer.group_send)(
+            "admin",
+            {
+                'type':'automation_message',
+                'data':text_data_json
+            }
+        )
         
         handle = f"event_{text_data_json['event_type']}"
         if hasattr(self,handle) and callable(func := getattr(self,handle)):
@@ -38,7 +46,7 @@ class PCAutomationConsumer(WebsocketConsumer):
                     'type':'automation_message',
                     'data':text_data_json
                 }
-            )        
+            )     
     
     #receive from room
     def automation_message(self,event):
@@ -62,6 +70,9 @@ class PCAutomationConsumer(WebsocketConsumer):
             "channel":self.channel_name,
             "datetime":timezone.now().strftime("%d-%b-%Y %H:%M:%S")
         }
+        if len(event["args"]) > 0:
+            connection_data["devicetype"] = event["args"][0]
+            
         Connection.objects.create(**connection_data)
     
     def event_disconnection(self,event):

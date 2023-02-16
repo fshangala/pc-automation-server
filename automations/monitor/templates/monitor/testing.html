@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'monitor:index' %}">Monitor</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Testing</li>
+    </ol>
+  </nav>
+  <button type="button" class="btn btn-primary position-relative" data-bs-toggle="modal" data-bs-target="#connectionModal">
+    <span id="connection-code">sample</span>
+    <span id="connection-badge" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border-light rounded-circle">
+      <span class="visually-hidden">online-state</span>
+    </span>
+  </button>
+
+  <div class="modal fade" id="connectionModal" tabindex="-1" aria-labelledby="connectionModal"  aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Create Connection</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="connectionModalBody">
+          <div class="mb-3">
+            <label for="hostInput" class="form-label">Host</label>
+            <input type="text" class="form-control" id="hostInput" placeholder="Host">
+          </div>
+          <div class="mb-3">
+            <label for="portInput" class="form-label">Port</label>
+            <input type="number" class="form-control" id="portInput" placeholder="Port">
+          </div>
+          <div class="mb-3">
+            <label for="codeInput" class="form-label">Code</label>
+            <input type="text" class="form-control" id="codeInput" placeholder="Code">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="connectButton" type="button" class="btn btn-primary" data-bs-dismiss="modal">Connect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="messageLog" class="mb-4"></div>
+  <div class="position-absolute bottom-0">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sendEventModal">Send Event</button>
+  </div>
+
+  <div class="modal fade" id="sendEventModal" tabindex="-1" aria-labelledby="sendEventModal"  aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Send Event</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="sendEventModalBody">
+          <div class="mb-3">
+            <label for="eventType" class="form-label">Event Type</label>
+            <input type="text" class="form-control" id="eventType" placeholder="Event Type">
+          </div>
+          <div class="mb-3">
+            <label for="eventName" class="form-label">Event Name</label>
+            <input type="text" class="form-control" id="eventName" placeholder="Event Name">
+          </div>
+          <div class="mb-3">
+            <label for="eventArgs" class="form-label">Event Args</label>
+            <textarea class="form-control" id="eventArgs" placeholder="['a','b','c']"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="sendEventButton" type="button" class="btn btn-primary" data-bs-dismiss="modal">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock main %}
+
+{% block jstags %}
+<script>
+  var host = "localhost"
+  var port = 8000
+  var code = "sample"
+
+  var socket = new WebSocket(`ws://${host}:${port}/ws/pcautomation/${code}/`)
+
+  var bcode = document.querySelector('#connection-code')
+  var bbadge = document.querySelector('#connection-badge')
+
+  document.querySelector('#hostInput').value = host
+  document.querySelector('#portInput').value = port
+  document.querySelector('#codeInput').value = code
+
+  function renderMessage(jsonData){
+    var messageLog = document.querySelector("#messageLog")
+
+    var message = document.createElement("div")
+    message.innerText = jsonData+"\n\n"
+    messageLog.appendChild(message)
+  }
+
+  function createConnection(){
+    socket.addEventListener('open',(event)=> {
+      bcode.innerText = code
+      bbadge.classList.remove('bg-danger')
+      bbadge.classList.add('bg-success')
+    })
+    socket.addEventListener('close',(event)=>{
+      bcode.innerText = code
+      bbadge.classList.remove('bg-success')
+      bbadge.classList.add('bg-danger')
+    })
+    socket.addEventListener('error',(event)=>{
+      bcode.innerText = code
+      bbadge.classList.remove('bg-success')
+      bbadge.classList.add('bg-danger')
+    })
+    socket.addEventListener('message',(event)=>{
+      renderMessage(event.data)
+    })
+  }
+
+  createConnection()
+
+  document.querySelector('#connectButton').addEventListener('click',(event)=>{
+    host = document.querySelector('#hostInput').value
+    port = document.querySelector('#portInput').value
+    code = document.querySelector('#codeInput').value
+    createConnection()
+  })
+  document.querySelector('#sendEventButton').addEventListener('click',(event)=>{
+    var eventType = document.querySelector('#eventType').value
+    var eventName = document.querySelector('#eventName').value
+    var eventArgs = document.querySelector('#eventArgs').value
+
+    var eventJson = `{"event_type":"${eventType}","event":"${eventName}","args":${eventArgs},"kwargs":{}}`
+    socket.send(eventJson)
+  })
+</script>
+{% endblock jstags %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Monitor</li>
+    </ol>
+  </nav>
+  <div class="list-group">
+    <a href="{% url 'monitor:testing' %}" class="list-group-item list-group-item-action shadow m-2">
+      <div class="d-flex justify-content-between">
+        <h5 class="mb-1">Testing</h5>
+      </div>
+    </a>
+    <a href="{% url 'monitor:connections' %}" class="list-group-item list-group-item-action shadow m-2">
+      <div class="d-flex justify-content-between">
+        <h5 class="mb-1">Connections</h5>
+      </div>
+    </a>
+  </div>
+</div>
+{% endblock main %}
