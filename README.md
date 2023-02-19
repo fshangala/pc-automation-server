@@ -1,7 +1,7 @@
 # pc-automation-server
 PC Automation Server
 
-## Run v1.3.1 (latest) on docker
+## Run on docker
 
 ### Create network and volume
 ```bash
@@ -21,7 +21,7 @@ docker run -d --network lambo-net --network-alias mysql -v lambo-data:/var/lib/m
 
 ### Run pc-automation-server
 ```bash
-docker run -dp 8281:80 --network lambo-net -v /home/iitsar/lambo.iitsar.com:/app/media fshangala/pc-automation-server:v1.3.1
+docker run -dp 8281:80 --network lambo-net -v /home/iitsar/lambo.iitsar.com:/app/media fshangala/pc-automation-server:main
 ```
 
 ### Apply migrations and create superuser

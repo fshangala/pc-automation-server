@@ -9,18 +9,17 @@
     </ol>
   </nav>
   <div class="list-group" id="connection-list">
+    <a href="#" class="list-group-item list-group-item-action shadow disabled m-2 active" aria-current="true">
+      <div class="d-flex justify-content-between">
+        <h5 class="mb-1">{{connections.count}} connections</h5>
+      </div>
+    </a>
     {% for connection in connections %}
     <a id="{{connection.id}}" href="{% url 'monitor:connection' pk=connection.id %}" class="list-group-item list-group-item-action shadow m-2">
       <div class="d-flex justify-content-between">
         <h5 class="mb-1">{{connection.devicetype}}</h5>
       </div>
       <small class="text-muted">{{connection.datetime}}</small>
-    </a>
-    {% empty %}
-    <a href="#" class="list-group-item list-group-item-action shadow m-2 disabled">
-      <div class="d-flex justify-content-between">
-        <h5 class="mb-1">No connections</h5>
-      </div>
     </a>
     {% endfor %}
   </div>

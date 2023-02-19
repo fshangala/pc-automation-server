@@ -2,6 +2,12 @@
 {% block main %}
 
 <div class="container" id="data-container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'softwares-list' %}">Softwares</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{software.repositoryname}}</li>
+      </ol>
+    </nav>
     <div class="text-center" id="spinner">
         <div class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>

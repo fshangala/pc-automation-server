@@ -23,9 +23,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from pcautomation.urls import router as pcautomationRouter
+from softwares.urls import router as softwareRouter
 
 router = DefaultRouter()
 router.registry.extend(pcautomationRouter.registry)
+router.registry.extend(softwareRouter.registry)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
