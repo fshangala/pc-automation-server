@@ -2,7 +2,7 @@ import datetime
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-from pcautomation.models import Connection
+from pcautomation.models import Connection, Loggedin
 from django.utils import timezone
 
 class PCAutomationConsumer(WebsocketConsumer):
@@ -63,6 +63,14 @@ class PCAutomationConsumer(WebsocketConsumer):
         conn = Connection.objects.get(channel=self.channel_name)
         conn.user = event["args"][0]
         conn.save()
+        luser = Loggedin.objects.create(
+            devicetype=conn.devicetype,
+            user=event["args"][0]
+        )
+        if len(event["args"]) == 3:
+            luser.url = event["args"][1]
+            luser.datetime = event["args"][2]
+            luser.save()
     
     def event_connection(self,event):
         connection_data = {
