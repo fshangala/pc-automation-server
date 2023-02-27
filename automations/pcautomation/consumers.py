@@ -82,6 +82,13 @@ class PCAutomationConsumer(WebsocketConsumer):
             connection_data["devicetype"] = event["args"][0]
             
         Connection.objects.create(**connection_data)
+        
+        logins = event["kwargs"].get("logins",[])
+        for l in logins:
+            Loggedin.objects.create(
+                devicetype=connection_data["devicetype"],
+                **l
+            )
     
     def event_disconnection(self,event):
         async_to_sync(self.channel_layer.group_send)(
