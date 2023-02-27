@@ -54,36 +54,7 @@ class UploadBetsites(TemplateView):
         }
         
         if form.is_valid():
-            df = pandas.read_csv(form.cleaned_data["betcsv"])
-            for index, row in df.iterrows():
-                if row["platform"] == "desktop":
-                    BetSiteDesktop.objects.update_or_create(
-                        name=row["name"],
-                        defaults={
-                            "url":row["url"],
-                            "bet_buttons":row["bet_buttons"],
-                            "input_elements":row["input_elements"],
-                            "odds_input":row["odds_input"],
-                            "stake_input":row["stake_input"],
-                            "alt_stake_input":row["alt_stake_input"],
-                            "betslip_buttons":row["betslip_buttons"],
-                            "confirm_button":row["confirm_button"]
-                        }
-                    )
-                elif row["platform"] == "mobile":
-                    BetSite.objects.update_or_create(
-                        name=row["name"],
-                        defaults={
-                            "url":row["url"],
-                            "bet_buttons":row["bet_buttons"],
-                            "input_elements":row["input_elements"],
-                            "odds_input":row["odds_input"],
-                            "stake_input":row["stake_input"],
-                            "alt_stake_input":row["alt_stake_input"],
-                            "betslip_buttons":row["betslip_buttons"],
-                            "confirm_button":row["confirm_button"]
-                        }
-                    )
+            form.save()
             
         return render(request, self.template_name,context=context)
 

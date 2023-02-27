@@ -22,6 +22,8 @@ class BetSite(models.Model):
     alt_stake_input=models.IntegerField()
     betslip_buttons=models.CharField(max_length=200)
     confirm_button=models.IntegerField()
+    username_input=models.CharField(max_length=200,null=True)
+    login_button=models.CharField(max_length=200,null=True)
     
     def __str__(self) -> str:
         return self.name
@@ -36,6 +38,8 @@ class BetSiteDesktop(models.Model):
     alt_stake_input=models.IntegerField()
     betslip_buttons=models.CharField(max_length=200)
     confirm_button=models.IntegerField()
+    username_input=models.CharField(max_length=200,null=True)
+    login_button=models.CharField(max_length=200,null=True)
     
     def __str__(self) -> str:
         return self.name
