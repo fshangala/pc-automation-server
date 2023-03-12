@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'monitor:index' %}">Monitor</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Upload Bet sites csv file</li>
+    </ol>
+  </nav>
+  <div class="card mb-3">
+    <div class="card-body">
+      <h3 class="card-title">Upload Bet sites csv file</h3>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">{{form.errors}}</div>
+        <div class="mb-3">
+          <label for="id_betcsv" class="form-label">Bet sites csv</label>
+          {{form.betcsv}}
+        </div>
+        <div class="mb-3">
+          <button type="submit" class="btn btn-primary">Submit</div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-header">
+      Mobile {{mobiles.length}}
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for mobile in mobiles %}
+      <li class="list-group-item">An item</li>
+      {% empty %}
+      <li class="list-group-item">There are no mobile betsites.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock main %}

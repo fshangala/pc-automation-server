@@ -26,3 +26,17 @@ class BetSite(models.Model):
     def __str__(self) -> str:
         return self.name
     
+class BetSiteDesktop(models.Model):
+    name=models.CharField(max_length=200)
+    url=models.URLField()
+    bet_buttons=models.CharField(max_length=200)
+    input_elements=models.CharField(max_length=200)
+    odds_input=models.IntegerField()
+    stake_input=models.IntegerField()
+    alt_stake_input=models.IntegerField()
+    betslip_buttons=models.CharField(max_length=200)
+    confirm_button=models.IntegerField()
+    
+    def __str__(self) -> str:
+        return self.name
+    

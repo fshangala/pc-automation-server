@@ -1,7 +1,7 @@
 # pc-automation-server
 PC Automation Server
 
-## Run on docker
+## Run with docker
 
 ### Create network and volume
 ```bash
@@ -21,7 +21,7 @@ docker run -d --network lambo-net --network-alias mysql -v lambo-data:/var/lib/m
 
 ### Run pc-automation-server
 ```bash
-docker run -dp 8281:80 --network lambo-net -v /home/iitsar/lambo.iitsar.com:/app/media fshangala/pc-automation-server:main
+docker run -dp 8281:80 --network lambo-net -v lambo-data:/app/media fshangala/pc-automation-server:main
 ```
 
 ### Apply migrations and create superuser
@@ -33,4 +33,13 @@ python manage.py migrate
 ```
 ```bash
 python manage.py createsuperuser --username admin --email admin@localhost
+```
+
+## Run with docker compose
+```bash
+docker-compose up -d
+```
+or
+```bash
+docker compose up -d
 ```
