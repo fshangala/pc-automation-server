@@ -1,6 +1,6 @@
 from dataclasses import field, fields
 from rest_framework import serializers
-from softwares.models import Software, BetSite
+from softwares.models import Software, BetSite, BetSiteDesktop
 
 class SoftwareSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,4 +10,9 @@ class SoftwareSerializer(serializers.ModelSerializer):
 class BetSiteSerializer(serializers.ModelSerializer):
     class Meta:
         model=BetSite
+        fields="__all__"
+        
+class BetSiteDesktopSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=BetSiteDesktop
         fields="__all__"
