@@ -13,17 +13,18 @@ class Connection(models.Model):
     
     @receiver(post_delete)
     def disconnect_channel(sender,instance,**kwargs):
-        text_data_json={
-            "event_type":"disconnection",
-            "event":instance.channel,
-            "args":[],
-            "kwargs":{}
-        }
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)("public",{
-            'type':'disconnect_channel',
-            'data':text_data_json
-        })
+        if sender == Connection:
+            text_data_json={
+                "event_type":"disconnection",
+                "event":instance.channel,
+                "args":[],
+                "kwargs":{}
+            }
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)("public",{
+                'type':'disconnect_channel',
+                'data':text_data_json
+            })
     
     def __str__(self) -> str:
         return self.devicetype + " " + self.datetime
