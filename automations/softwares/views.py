@@ -8,19 +8,50 @@ import os
 from softwares.serializers import SoftwareSerializer
 from django.views.generic import ListView, DetailView, TemplateView
 from rest_framework import viewsets
-from .forms import UploadBetSitesForm
+from .forms import UploadBetSitesForm, UploadSoftwaresForm
 from django.shortcuts import reverse
 import pandas
+
+class UploadSoftwares(TemplateView):
+    template_name="softwares/upload_softwares.html"
+    
+    def get(self, request):
+        context = {
+            "form":UploadSoftwaresForm(),
+            "softwares":Software.objects.all()
+        }
+        return render(request, self.template_name,context=context)
+    
+    def post(self,request,*args,**kwargs):
+        form = UploadSoftwaresForm(request.POST,request.FILES)
+        context = {
+            "form":form,
+            "softwares":Software.objects.all()
+        }
+        
+        if form.is_valid():
+            form.save()
+            
+        return render(request, self.template_name,context=context)
 
 class UploadBetsites(TemplateView):
     template_name="softwares/upload_betsites.html"
     
     def get(self, request):
-        context = {"form":UploadBetSitesForm()}
+        context = {
+            "form":UploadBetSitesForm(),
+            "mobiles":BetSite.objects.all(),
+            "desktops":BetSiteDesktop.objects.all()
+        }
         return render(request, self.template_name,context=context)
     
     def post(self,request,*args,**kwargs):
         form = UploadBetSitesForm(request.POST,request.FILES)
+        context = {
+            "form":form,
+            "mobiles":BetSite.objects.all(),
+            "desktops":BetSiteDesktop.objects.all()
+        }
         
         if form.is_valid():
             df = pandas.read_csv(form.cleaned_data["betcsv"])
@@ -54,7 +85,7 @@ class UploadBetsites(TemplateView):
                         }
                     )
             
-        return render(request, self.template_name,context={"form":form})
+        return render(request, self.template_name,context=context)
 
 class SoftwareListView(ListView):
     model=Software

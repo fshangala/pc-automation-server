@@ -23,5 +23,29 @@
       <td>{{connection.datetime}}</td>
     </tr>
   </table>
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title">Login activity</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Url</th>
+            <th>Datetime</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for login in logins %}
+          <tr>
+            <td>{{login.user}}</td>
+            <td>{{login.url}}</td>
+            <td>{{login.datetime}}</td>
+          </tr>
+          {% empty %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 {% endblock main %}

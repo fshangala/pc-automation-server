@@ -3,7 +3,7 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-
+    
 # Create your models here.
 class Connection(models.Model):
     devicetype=models.CharField(max_length=200)
@@ -28,3 +28,12 @@ class Connection(models.Model):
     
     def __str__(self) -> str:
         return self.devicetype + " " + self.datetime
+    
+class Loggedin(models.Model):
+    devicetype=models.CharField(max_length=200)
+    user=models.CharField(max_length=200)
+    url=models.URLField(null=True)
+    datetime=models.CharField(max_length=200,null=True)
+    
+    def __str__(self):
+        return self.user
