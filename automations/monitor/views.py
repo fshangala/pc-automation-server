@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView
-from pcautomation.models import Connection
+from pcautomation.models import Connection, Loggedin
 from pcautomation.serializers import ConnectionSerializer
 
 class MonitorView(TemplateView):
@@ -18,3 +18,9 @@ class ConnectionDetail(DetailView):
   model=Connection
   context_object_name="connection"
   template_name="monitor/connection_detail.html"
+  
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context["logins"] = Loggedin.objects.filter(devicetype=context["connection"].devicetype)
+    return context
+  
