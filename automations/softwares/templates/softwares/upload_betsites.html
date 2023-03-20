@@ -23,25 +23,29 @@
           </div>
         </form>
       </div>
-      <div class="mb-3 p-4">
-        <h3 class="card-title">Mobile betsites {{mobiles.length}}</h3>
-        <ul class="list-group list-group-flush">
-          {% for mobile in mobiles %}
-          <li class="list-group-item">{{mobile.name}}</li>
-          {% empty %}
-          <li class="list-group-item">There are no mobile betsites.</li>
-          {% endfor %}
-        </ul>
+      <div class="mb-3">
+        <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMobileBetsites" aria-expanded="false" aria-controls="collapseMobileBetsites">Mobile betsites <span class="badge text-bg-secondary">{{mobiles.count}}</span></button>
+        <div class="collapse border p-4" id="collapseMobileBetsites">
+          <ul class="list-group list-group-flush">
+            {% for mobile in mobiles %}
+            <li class="list-group-item">{{mobile.name}}</li>
+            {% empty %}
+            <li class="list-group-item">There are no mobile betsites.</li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
-      <div class="mb-3 p-4">
-        <h3 class="card-title">Desktop betsites {{desktops.length}}</h3>
-        <ul class="list-group list-group-flush">
-          {% for desktop in desktops %}
-          <li class="list-group-item">{{desktop.name}}</li>
-          {% empty %}
-          <li class="list-group-item">There are no mobile betsites.</li>
-          {% endfor %}
-        </ul>
+      <div class="mb-3">
+        <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesktopBetsites" aria-expanded="false" aria-controls="collapseDesktopBetsites">Desktop betsites <span class="badge text-bg-secondary">{{desktops.count}}</span></button>
+        <div class="collapse border p-4" id="collapseDesktopBetsites">
+          <ul class="list-group list-group-flush">
+            {% for desktop in desktops %}
+            <li class="list-group-item">{{desktop.name}}</li>
+            {% empty %}
+            <li class="list-group-item">There are no mobile betsites.</li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
     </div>
   </div>

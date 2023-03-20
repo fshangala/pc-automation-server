@@ -3,7 +3,7 @@ from django.urls import reverse
 
 # Create your models here.
 class Software(models.Model):
-    repositoryname=models.CharField(max_length=200)
+    repositoryname=models.CharField(max_length=200,unique=True)
     repositoryowner=models.CharField(max_length=200,default="fshangala")
     
     def get_absolute_url(self):

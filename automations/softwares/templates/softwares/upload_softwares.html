@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'monitor:index' %}">Monitor</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Upload Softwares csv file</li>
+    </ol>
+  </nav>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="mb-3 p-4">
+        <h3 class="card-title">Upload Softwares csv file</h3>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3">{{form.errors}}</div>
+          <div class="mb-3">
+            <label for="id_softwarescsv" class="form-label">Softwares csv</label>
+            {{form.softwarescsv}}
+          </div>
+          <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Submit</div>
+          </div>
+        </form>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSoftware" aria-expanded="false" aria-controls="collapseSoftware">Softwares <span class="badge text-bg-secondary">{{softwares.count}}</span></button>
+        <div class="collapse border p-4" id="collapseSoftware">
+          <ul class="list-group list-group-flush">
+            {% for software in softwares %}
+            <li class="list-group-item">{{software.repositoryname}}</li>
+            {% empty %}
+            <li class="list-group-item">There are no mobile betsites.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock main %}

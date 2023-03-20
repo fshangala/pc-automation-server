@@ -8,9 +8,31 @@ import os
 from softwares.serializers import SoftwareSerializer
 from django.views.generic import ListView, DetailView, TemplateView
 from rest_framework import viewsets
-from .forms import UploadBetSitesForm
+from .forms import UploadBetSitesForm, UploadSoftwaresForm
 from django.shortcuts import reverse
 import pandas
+
+class UploadSoftwares(TemplateView):
+    template_name="softwares/upload_softwares.html"
+    
+    def get(self, request):
+        context = {
+            "form":UploadSoftwaresForm(),
+            "softwares":Software.objects.all()
+        }
+        return render(request, self.template_name,context=context)
+    
+    def post(self,request,*args,**kwargs):
+        form = UploadSoftwaresForm(request.POST,request.FILES)
+        context = {
+            "form":form,
+            "softwares":Software.objects.all()
+        }
+        
+        if form.is_valid():
+            form.save()
+            
+        return render(request, self.template_name,context=context)
 
 class UploadBetsites(TemplateView):
     template_name="softwares/upload_betsites.html"
