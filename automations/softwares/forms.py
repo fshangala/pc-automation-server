@@ -1,7 +1,9 @@
 from django import forms
 import pandas
 from softwares.models import (
-  Software
+  Software,
+  BetSiteDesktop,
+  BetSite
 )
 
 class UploadSoftwaresForm(forms.Form):
@@ -25,7 +27,7 @@ class UploadBetSitesForm(forms.Form):
   }))
   
   def save(self):
-    df = pandas.read_csv(form.cleaned_data["betcsv"])
+    df = pandas.read_csv(self.cleaned_data["betcsv"])
     for index, row in df.iterrows():
       defaults = {
         "url":row["url"],
