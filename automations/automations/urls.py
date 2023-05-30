@@ -24,6 +24,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from pcautomation.urls import router as pcautomationRouter
 from softwares.urls import router as softwareRouter
+from rest_framework.authtoken import views
 
 router = DefaultRouter()
 router.registry.extend(pcautomationRouter.registry)
@@ -39,5 +40,6 @@ urlpatterns = [
     path('api/version/',SoftwareVersion.as_view(),name="version"),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL+'images/favicon.ico')),
     path('monitor/',include("monitor.urls")),
-    path('api/',include(router.urls))
+    path('api/',include(router.urls)),
+    path('api-token-auth/',views.obtain_auth_token)
 ]
