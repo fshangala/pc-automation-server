@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'softwares',
     'monitor',
     'corsheaders',
+    'accounts',
 
     'channels',
     'rest_framework',
