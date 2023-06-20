@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import environ
 
-VERSION = "v1.8"
+VERSION = "v1.9"
 
 env = environ.Env(
     DEBUG=(bool,True),
@@ -46,9 +46,11 @@ INSTALLED_APPS = [
     'softwares',
     'monitor',
     'corsheaders',
+    'accounts',
 
     'channels',
     'rest_framework',
+    'rest_framework.authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
