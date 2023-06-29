@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import environ
 
-VERSION = "v1.9"
+VERSION = "v2.0"
 
 env = environ.Env(
     DEBUG=(bool,True),
