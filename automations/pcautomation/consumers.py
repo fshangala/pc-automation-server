@@ -7,6 +7,7 @@ from django.utils import timezone
 
 class PCAutomationConsumer(WebsocketConsumer):
     def connect(self):
+        
         self.room_name = self.scope['url_route']['kwargs']['room_name']
 
         #join room
@@ -80,6 +81,12 @@ class PCAutomationConsumer(WebsocketConsumer):
         }
         if len(event["args"]) > 0:
             connection_data["devicetype"] = event["args"][0]
+        
+        user = self.scope["user"]
+        if user.is_anonymous:
+            pass
+        else:
+            connection_data["l_user"]=user
             
         Connection.objects.create(**connection_data)
         
