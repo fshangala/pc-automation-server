@@ -8,7 +8,7 @@ class ProfileSerializer(ModelSerializer):
     fields="__all__"
     
 class UserSerializer(ModelSerializer):
-  profile=ProfileSerializer(read_only=True)
+  profile=ProfileSerializer(many=False,read_only=True)
   class Meta:
     model=User
     fields=["id","username","first_name","last_name","email","is_superuser","is_staff","profile"]
