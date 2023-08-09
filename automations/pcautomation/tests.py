@@ -18,6 +18,7 @@ class PCAutomationTestCase(TestCase):
     ]))
     
   async def test_connection(self):
+    print("->",self.id())
     user = await database_sync_to_async(User.objects.create)(username="test",password="test")
     communicator = WebsocketCommunicator(self.application,f"/ws/pcautomation/sample/?token={user.auth_token}")
     connected, subprotocol = await communicator.connect()
