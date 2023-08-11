@@ -17,9 +17,11 @@ class TokenAuthMiddleWare:
     
   async def __call__(self, scope, receive, send):
     query_string = dict(parse_qsl(scope["query_string"].decode("utf8")))
-    token = query_string["token"]
+    token = query_string.get("token","")
+    devicetype= query_string.get("devicetype","unknown")
     token_user = await get_token_user(token)
     scope["user"] = token_user
+    scope["devicetype"] = devicetype
     
     return await self.app(scope,receive,send)
     

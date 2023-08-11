@@ -7,6 +7,7 @@ import json, datetime
 from django.conf import settings
 from rest_framework import viewsets
 from . import models, serializers
+from rest_framework.decorators import action
 
 # Create your views here.
 class AutomationView(APIView):
@@ -28,4 +29,22 @@ class SoftwareVersion(APIView):
 class ConnectionViewsets(viewsets.ModelViewSet):
     queryset=models.Connection.objects.all()
     serializer_class=serializers.ConnectionSerializer
+    
+    @action(detail=False,methods=['get'])
+    def get_by_channel(self,request):
+        channel = request.GET.get("channel",None)
+        if channel:
+            try:
+                channel_connection = models.Connection.objects.get(channel=channel)
+            except Exception as e:
+                channel_connection = None
+                return Response(status=404)
+            finally:
+                connection_json = self.serializer_class(channel_connection).data
+                return Response(data=connection_json,status=200)
+            
+        else:
+            channel_connection = None
+            return Response(status=400)
+        
     
