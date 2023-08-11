@@ -5,9 +5,31 @@ from asgiref.sync import async_to_sync
 from pcautomation.models import Connection, Loggedin
 from django.utils import timezone
 
+class AutomationConsumer(WebsocketConsumer):
+    def connect(self):
+        pass
+    
+    def disconnect(self,code):
+        pass
+    
+    def receive(self,text_data=None,bytes_data=None):
+        pass
+
 class PCAutomationConsumer(WebsocketConsumer):
     def connect(self):
+        
         self.room_name = self.scope['url_route']['kwargs']['room_name']
+        
+        #save connection
+        connection_data = {
+            "devicetype":self.scope["devicetype"],
+            "channel":self.channel_name,
+            "datetime":timezone.now().strftime("%d-%b-%Y %H:%M:%S")
+        }
+        if not self.scope["user"].is_anonymous:
+            connection_data["l_user"]=self.scope["user"]
+        
+        Connection.objects.create(**connection_data)
 
         #join room
         async_to_sync(self.channel_layer.group_add)("public",self.channel_name)
@@ -80,6 +102,12 @@ class PCAutomationConsumer(WebsocketConsumer):
         }
         if len(event["args"]) > 0:
             connection_data["devicetype"] = event["args"][0]
+        
+        user = self.scope["user"]
+        if user.is_anonymous:
+            pass
+        else:
+            connection_data["l_user"]=user
             
         Connection.objects.create(**connection_data)
         

@@ -7,13 +7,24 @@ For more information on this file, see
 https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
 """
 
+from pathlib import Path
+import environ
 import os, django
+
+env = environ.Env(
+    DEBUG=(bool,True),
+)
+BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR,".env"))
+DEBUG = env("DEBUG")
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'automations.settings')
 django.setup()
 
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
+from accounts.middlewares import TokenAuthMiddleWare
 import pcautomation.routing
 import urllib.request
 import requests
@@ -50,13 +61,13 @@ for i in range(3):
         
         break
 
-if len(log) > 0:
+if len(log) > 0 and DEBUG == False:
     with open(os.path.join(log_folder,f"{log_name}.txt"),"w") as log_file:
         log_file.writelines([f"{a[0]},{a[1]} = {a[2]}\n" for a in log])
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": AuthMiddlewareStack(
+    "websocket": TokenAuthMiddleWare(
         URLRouter(
             pcautomation.routing.websocket_urlpatterns
         )

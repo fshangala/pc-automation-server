@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import environ
 
-VERSION = "v2.0"
+VERSION = "v2.1"
 
 env = environ.Env(
     DEBUG=(bool,True),
@@ -128,8 +128,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+if DEBUG:
+    STATIC_URL = "/static/"
+else:
+    STATIC_URL = 'https://cdn.statically.io/gh/fshangala/pc-automation-server/main/automations/static/'
 
-STATIC_URL = 'https://cdn.statically.io/gh/fshangala/pc-automation-server/main/automations/static/'
 STATIC_ROOT = os.path.join(BASE_DIR,"static")
 
 # Default primary key field type

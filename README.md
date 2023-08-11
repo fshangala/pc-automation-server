@@ -24,7 +24,16 @@ docker run -d --network lambo-net --network-alias mysql -v lambo-data:/var/lib/m
 docker run -dp 8281:80 --network lambo-net -v lambo-data:/app/media fshangala/pc-automation-server:main
 ```
 
-### Apply migrations and create superuser
+## Run with docker compose
+```bash
+docker-compose up -d
+```
+or
+```bash
+docker compose up -d
+```
+
+## Apply migrations and create superuser
 ```bash
 docker exec -it <container_id> /bin/bash
 ```
@@ -33,13 +42,4 @@ python manage.py migrate
 ```
 ```bash
 python manage.py createsuperuser --username admin --email admin@localhost
-```
-
-## Run with docker compose
-```bash
-docker-compose up -d
-```
-or
-```bash
-docker compose up -d
 ```
