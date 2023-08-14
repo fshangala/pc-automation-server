@@ -27,7 +27,8 @@ class PCAutomationConsumer(WebsocketConsumer):
         connection_data = {
             "devicetype":self.scope["devicetype"],
             "channel":self.channel_name,
-            "datetime":timezone.now().strftime("%d-%b-%Y %H:%M:%S")
+            "datetime":timezone.now().strftime("%d-%b-%Y %H:%M:%S"),
+            "code":self.room_name
         }
         if not self.scope["user"].is_anonymous:
             connection_data["l_user"]=self.scope["user"]
@@ -53,9 +54,11 @@ class PCAutomationConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         text_data_json["channel"] = self.channel_name
+        text_data_json["code"] = self.room_name
         
         connection = Connection.objects.get(channel=self.channel_name)
         text_data_json["connection"] = ConnectionSerializer(connection).data
+        
         async_to_sync(self.channel_layer.group_send)(
             "admin",
             {

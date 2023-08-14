@@ -34,18 +34,18 @@
     </span>
   </button>
 
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Event Type</th>
-            <th>Event</th>
-            <th>Args</th>
-            <th>Kwargs</th>
-          </tr>
-        </thead>
-        <tbody id="tbody">
-        </tbody>
-      </table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Event Type</th>
+        <th>Event</th>
+        <th>Args</th>
+        <th>Code</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+    </tbody>
+  </table>
     </div>
   </div>
 </div>
@@ -88,9 +88,9 @@
       args.innerText = JSON.stringify(jsonData.args)
       tr.appendChild(args)
 
-      var kwargs = document.createElement("td")
-      kwargs.innerText = JSON.stringify(jsonData.kwargs)
-      tr.appendChild(kwargs)
+      var code = document.createElement("td")
+      code.innerText = jsonData.code
+      tr.appendChild(code)
     
       tbody.insertBefore(tr,tbody.children[0])
     }

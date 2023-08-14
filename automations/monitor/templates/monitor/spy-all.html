@@ -25,7 +25,7 @@
             <th>Event Type</th>
             <th>Event</th>
             <th>Args</th>
-            <th>Kwargs</th>
+            <th>Code</th>
             <th>Connection</th>
           </tr>
         </thead>
@@ -72,9 +72,9 @@
     args.innerText = JSON.stringify(jsonData.args)
     tr.appendChild(args)
 
-    var kwargs = document.createElement("td")
-    kwargs.innerText = JSON.stringify(jsonData.kwargs)
-    tr.appendChild(kwargs)
+    var code = document.createElement("td")
+    code.innerText = jsonData.code
+    tr.appendChild(code)
 
     var connection = document.createElement("td")
     tr.appendChild(connection)
