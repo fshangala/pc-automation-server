@@ -12,6 +12,7 @@ class Connection(models.Model):
     user=models.CharField(max_length=200,null=True)
     l_user=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     datetime=models.CharField(max_length=200)
+    code=models.CharField(max_length=200,null=True)
     
     @receiver(post_delete)
     def disconnect_channel(sender,instance,**kwargs):

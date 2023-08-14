@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'monitor:index' %}">Monitor</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'monitor:spy' %}">Spy</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Connection {{connection.id}}</li>
+    </ol>
+  </nav>
+  <table class="table">
+    <tr>
+      <th scope="row">Device Type</th>
+      <td>{{connection.devicetype}}</td>
+    </tr>
+    <tr>
+      <th scope="row">User</th>
+      <td>{{connection.l_user}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Timestamp</th>
+      <td>{{connection.datetime}}</td>
+    </tr>
+  </table>
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title">Connection activity</h3>
+
+  <button id="connectButton" type="button" class="btn btn-primary position-relative">
+    <span id="connection-code">sample</span>
+    <span id="connection-badge" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border-light rounded-circle">
+      <span class="visually-hidden">online-state</span>
+    </span>
+  </button>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Event Type</th>
+        <th>Event</th>
+        <th>Args</th>
+        <th>Code</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+    </tbody>
+  </table>
+    </div>
+  </div>
+</div>
+{% endblock main %}
+{% block jstags %}
+
+{{ connection|json_script:"connection" }}
+{{ django_settings|json_script:"django_settings" }}
+<script>
+  var connection = JSON.parse(document.querySelector("#connection").innerText)
+  var django_settings = JSON.parse(document.querySelector("#django_settings").innerText)
+  
+  var host = "localhost"
+  var port = 80
+  if (django_settings.debug){
+    port = 8000
+  }
+  var code = "admin"
+
+  var socket = new WebSocket(`ws://${host}:${port}/ws/pcautomation/${code}/`)
+
+  var bcode = document.querySelector('#connection-code')
+  var bbadge = document.querySelector('#connection-badge')
+
+  function renderMessage(jsonData){
+    if(connection.id == jsonData.connection.id){
+      var tbody = document.querySelector("#tbody")
+
+      var tr = document.createElement("tr")
+
+      var event_type = document.createElement("td")
+      event_type.innerText = jsonData.event_type
+      tr.appendChild(event_type)
+
+      var event = document.createElement("td")
+      event.innerText = jsonData.event
+      tr.appendChild(event)
+
+      var args = document.createElement("td")
+      args.innerText = JSON.stringify(jsonData.args)
+      tr.appendChild(args)
+
+      var code = document.createElement("td")
+      code.innerText = jsonData.code
+      tr.appendChild(code)
+    
+      tbody.insertBefore(tr,tbody.children[0])
+    }
+    
+  }
+
+  function createConnection(){
+    socket.addEventListener('open',(event)=> {
+      bcode.innerText = code
+      bbadge.classList.remove('bg-danger')
+      bbadge.classList.add('bg-success')
+    })
+    socket.addEventListener('close',(event)=>{
+      bcode.innerText = code
+      bbadge.classList.remove('bg-success')
+      bbadge.classList.add('bg-danger')
+    })
+    socket.addEventListener('error',(event)=>{
+      bcode.innerText = code
+      bbadge.classList.remove('bg-success')
+      bbadge.classList.add('bg-danger')
+    })
+    socket.addEventListener('message',(event)=>{
+      renderMessage(JSON.parse(event.data))
+    })
+  }
+
+  createConnection()
+
+  document.querySelector('#connectButton').addEventListener('click',(event)=>{
+    createConnection()
+  })
+</script>
+{% endblock jstags %}
