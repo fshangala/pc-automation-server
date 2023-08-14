@@ -2,7 +2,10 @@ import datetime
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+import django
+django.setup()
 from pcautomation.models import Connection, Loggedin
+from pcautomation.serializers import ConnectionSerializer
 from django.utils import timezone
 
 class AutomationConsumer(WebsocketConsumer):
@@ -50,6 +53,9 @@ class PCAutomationConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         text_data_json["channel"] = self.channel_name
+        
+        connection = Connection.objects.get(channel=self.channel_name)
+        text_data_json["connection"] = ConnectionSerializer(connection).data
         async_to_sync(self.channel_layer.group_send)(
             "admin",
             {
@@ -97,7 +103,6 @@ class PCAutomationConsumer(WebsocketConsumer):
     def event_connection(self,event):
         connection_data = {
             "devicetype":event["event"],
-            "channel":self.channel_name,
             "datetime":timezone.now().strftime("%d-%b-%Y %H:%M:%S")
         }
         if len(event["args"]) > 0:
@@ -109,7 +114,7 @@ class PCAutomationConsumer(WebsocketConsumer):
         else:
             connection_data["l_user"]=user
             
-        Connection.objects.create(**connection_data)
+        Connection.objects.update_or_create(channel=self.channel_name,defaults=connection_data)
         
         logins = event["kwargs"].get("logins",[])
         for l in logins:

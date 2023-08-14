@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import environ
 
-VERSION = "v2.1"
+VERSION = "v2.2"
 
 env = environ.Env(
     DEBUG=(bool,True),
@@ -83,6 +83,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'automations.context_processors.settings_processor',
             ],
         },
     },
