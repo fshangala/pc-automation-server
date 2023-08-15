@@ -43,7 +43,7 @@
   var connection = JSON.parse(document.querySelector("#connection").innerText)
   var django_settings = JSON.parse(document.querySelector("#django_settings").innerText)
   
-  var host = "localhost"
+  var host = window.location.hostname
   var port = 80
   if (django_settings.debug){
     port = 8000
